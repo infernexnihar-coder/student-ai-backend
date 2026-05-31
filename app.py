@@ -1,9 +1,11 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from transformers import pipeline
 
 app = Flask(__name__)
+CORS(app)
 
-# Load a free Hugging Face model
+# Load Hugging Face model once at startup
 qa_model = pipeline("question-answering", model="distilbert-base-uncased-distilled-squad")
 
 @app.route("/ask", methods=["POST"])
@@ -12,7 +14,7 @@ def ask():
     question = data.get("question", "")
 
     # Simple context for demo
-    context = "Student AI is a learning assistant that helps answer questions for students."
+    context = "Photosynthesis is the process by which plants use sunlight to make food."
 
     try:
         result = qa_model(question=question, context=context)
